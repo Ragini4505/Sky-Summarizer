@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SkySummarizer
 
 A simple web application for text summarization with AWS Polly speech synthesis capabilities.
@@ -126,3 +127,6 @@ npm run dev  # Uses nodemon for auto-restart
 - Use IAM roles in production environments
 - Consider using AWS Cognito for temporary credentials
 - The backend serves the frontend statically for demo purposes
+=======
+# Sky-Summarizer
+>>>>>>> bbe3812884d45f533e63783eca2e8f7a80ec24ae
