@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started - SkySummarizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">SkySummarizer</a>
+</nav>
+
+<main class="container">
+    <h1>Summarize Your Text</h1>
+
+    <div>
+        <textarea id="inputText" placeholder="Paste your text here..." maxlength="50000"></textarea>
+        <div style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem; text-align: right;">
+            <span id="charCount">0</span> / <span id="charLimit">50,000</span> characters
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button onclick="summarizeText()" class="btn btn-primary">
+            Summarize
+        </button>
+    </div>
+
+    <div class="speech-settings" style="margin: 1rem 0; display: flex; align-items: center; gap: 0.75rem;">
+        <label for="speechLanguage" style="font-weight: 600;">Speech language:</label>
+        <select id="speechLanguage" style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background: white;">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+        </select>
+    </div>
+
+    <div class="output-section">
+        <div class="output-header">
+            <h3>Summary:</h3>
+            <div class="output-actions">
+                <button onclick="speakSummary()" class="btn btn-outline btn-sm" id="speakButton">
+                    🔊 Speak
+                </button>
+                <button onclick="downloadSummary()" class="btn btn-outline btn-sm" id="downloadButton">
+                    ⬇️ Download
+                </button>
+            </div>
+        </div>
+        <div id="output"></div>
+    </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

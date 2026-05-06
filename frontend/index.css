@@ -1,0 +1,351 @@
+/* Global reset and typography */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #ffffff;
+  color: #1f2937;
+  line-height: 1.75;
+  min-height: 100vh;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: #3b82f6;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 600;
+}
+
+a:hover:not(.btn) {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.container {
+  width: min(1200px, calc(100% - 3rem));
+  margin-inline: auto;
+  padding-block: 2.5rem;
+}
+
+header {
+  padding-block: 2rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+header p {
+  max-width: 720px;
+  margin: 0 auto;
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.5rem 0;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #1e40af;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: nowrap;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list a {
+  color: #4b5563;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.nav-list a:hover {
+  color: #1e40af;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.language-selector {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #0a0e27;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.language-selector:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.language-selector:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 100%);
+  border: 2px solid #2563eb;
+  border-radius: 1.25rem;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15);
+  padding: 5rem 4rem;
+  margin: 3rem auto;
+  max-width: 1100px;
+  text-align: center;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+.hero p.lead {
+  max-width: 640px;
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.85rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  font-weight: 700;
+}
+
+.btn-outline {
+  background: #ffffff;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+.btn-outline:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+  border-color: #8b5cf6;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+.features {
+  margin-block: 3rem;
+}
+
+.features h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.features h3 {
+  color: #1f2937;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.card {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb 0%, #8b5cf6 50%, #ec4899 100%);
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.card p {
+  color: #4b5563;
+  font-weight: 400;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+  border-color: #8b5cf6;
+}
+
+footer {
+  padding-block: 2.5rem;
+  text-align: center;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+@media (max-width: 560px) {
+  .container {
+    padding-block: 1.5rem;
+  }
+
+  .hero {
+    padding: 2rem;
+    margin: 2rem auto;
+  }
+
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .cards {
+    padding: 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  .nav-list {
+    gap: 0.75rem;
+  }
+
+  .features h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+}
