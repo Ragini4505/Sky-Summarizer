@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SkySummarizer
 
 A simple web application for text summarization with AWS Polly speech synthesis capabilities.
