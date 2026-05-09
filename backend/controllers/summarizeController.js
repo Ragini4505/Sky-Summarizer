@@ -1,30 +1,17 @@
-const { generateSummary } = require("../services/aiServices");
-
-// Character limit configuration
-const MAX_CHARACTERS = 50000;
-const MIN_CHARACTERS = 20;
+const { generateSummary } = require('../services/aiServices');
 
 exports.summarizeText = async (req, res) => {
     try {
         const { text } = req.body;
 
-        if (!text) {
-            return res.status(400).json({ error: "Text is required" });
-        }
-        
-        if (text.length < MIN_CHARACTERS) {
-            return res.status(400).json({ error: `Text must be at least ${MIN_CHARACTERS} characters long` });
-        }
-        
-        if (text.length > MAX_CHARACTERS) {
-            return res.status(413).json({ error: `Text exceeds maximum limit of ${MAX_CHARACTERS.toLocaleString()} characters` });
+        if (!text || typeof text !== 'string' || !text.trim()) {
+            return res.status(400).json({ error: 'Text is required.' });
         }
 
         const summary = await generateSummary(text);
-
-        res.json({ summary });
-
+        return res.json({ summary });
     } catch (error) {
-        res.status(500).json({ error: "Server error" });
+        console.error('Error in summarizeText:', error);
+        return res.status(500).json({ error: 'Failed to generate summary.', details: error.message });
     }
 };

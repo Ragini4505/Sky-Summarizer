@@ -7,17 +7,13 @@ let summaryGenerated = false;
 const API_BASE = (() => {
     const protocol = window.location.protocol;
     const host = window.location.hostname;
-    const port = window.location.port;
+    const origin = window.location.origin;
 
     if (protocol === 'file:' || !host) {
-        return 'http://localhost:3000';
+        return 'http://localhost:5000';
     }
 
-    if ((host === 'localhost' || host === '127.0.0.1') && port && port !== '3000') {
-        return 'http://localhost:3000';
-    }
-
-    return window.location.origin;
+    return origin || 'http://localhost:5000';
 })();
 
 // Character limit configuration
@@ -184,44 +180,51 @@ async function speakSummary() {
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                const details = errorData.details ? `: ${errorData.details}` : '';
-                throw new Error((errorData.error || 'Speech synthesis failed') + details);
+                
+                // If AWS not configured, use browser fallback
+                if (response.status === 503 && errorData.useBrowserFallback) {
+                    console.warn('AWS not configured, falling back to browser speech synthesis');
+                    backendFailed = true;
+                } else {
+                    const details = errorData.details ? `: ${errorData.details}` : '';
+                    throw new Error((errorData.error || 'Speech synthesis failed') + details);
+                }
+            } else {
+                console.log('Received audio response from AWS Polly');
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                if (!audioElement) {
+                    audioElement = new Audio();
+                }
+
+                audioElement.src = audioUrl;
+                audioElement.onloadeddata = function() {
+                    console.log('Audio loaded, starting playback');
+                    isSpeaking = true;
+                    speakButton.innerHTML = "⏹️ Stop";
+                    speakButton.disabled = false;
+                    audioElement.play();
+                };
+
+                audioElement.onended = function() {
+                    console.log('Audio playback ended');
+                    isSpeaking = false;
+                    speakButton.innerHTML = "🔊 Speak";
+                    URL.revokeObjectURL(audioUrl);
+                };
+
+                audioElement.onerror = function(error) {
+                    console.error('Audio playback error:', error);
+                    isSpeaking = false;
+                    speakButton.innerHTML = "🔊 Speak";
+                    speakButton.disabled = false;
+                    alert("Error playing audio. Please try again.");
+                    URL.revokeObjectURL(audioUrl);
+                };
+
+                return;
             }
-
-            console.log('Received audio response from AWS Polly');
-            const audioBlob = await response.blob();
-            const audioUrl = URL.createObjectURL(audioBlob);
-
-            if (!audioElement) {
-                audioElement = new Audio();
-            }
-
-            audioElement.src = audioUrl;
-            audioElement.onloadeddata = function() {
-                console.log('Audio loaded, starting playback');
-                isSpeaking = true;
-                speakButton.innerHTML = "⏹️ Stop";
-                speakButton.disabled = false;
-                audioElement.play();
-            };
-
-            audioElement.onended = function() {
-                console.log('Audio playback ended');
-                isSpeaking = false;
-                speakButton.innerHTML = "🔊 Speak";
-                URL.revokeObjectURL(audioUrl);
-            };
-
-            audioElement.onerror = function(error) {
-                console.error('Audio playback error:', error);
-                isSpeaking = false;
-                speakButton.innerHTML = "🔊 Speak";
-                speakButton.disabled = false;
-                alert("Error playing audio. Please try again.");
-                URL.revokeObjectURL(audioUrl);
-            };
-
-            return;
         } catch (backendError) {
             backendFailed = true;
             console.warn('Backend speech request failed:', backendError);
@@ -235,11 +238,12 @@ async function speakSummary() {
             const voice = getAvailableVoice(selectedLanguage);
             if (!voice) {
                 if (selectedLanguage === 'hi') {
-                    throw new Error('Hindi speech is not available in this browser. Please use backend speech or try a different browser.');
+                    throw new Error('Hindi voice not available in this browser. Available voices: ' + window.speechSynthesis.getVoices().map(v => v.name).join(', '));
                 }
                 throw new Error('No speech synthesis voice was found for your browser.');
             }
 
+            console.log(`Using browser Web Speech API with voice: ${voice.name}`);
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = selectedLanguage === 'hi' ? 'hi-IN' : 'en-US';
             utterance.voice = voice;

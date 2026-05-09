@@ -45,14 +45,23 @@ const translateClient = new TranslateClient({
 });
 
 async function translateToHindi(text) {
-    const command = new TranslateTextCommand({
-        Text: text,
-        SourceLanguageCode: 'en',
-        TargetLanguageCode: 'hi'
-    });
+    try {
+        console.log('Translating text to Hindi...');
+        const command = new TranslateTextCommand({
+            Text: text,
+            SourceLanguageCode: 'en',
+            TargetLanguageCode: 'hi'
+        });
 
-    const response = await translateClient.send(command);
-    return response.TranslatedText || text;
+        const response = await translateClient.send(command);
+        const translatedText = response.TranslatedText || text;
+        console.log(`Translation successful. Translated text length: ${translatedText.length}`);
+        return translatedText;
+    } catch (error) {
+        console.error('Translation error:', error);
+        console.warn('Falling back to original text for Hindi speech');
+        return text;
+    }
 }
 
 // Speech synthesis endpoint
@@ -65,6 +74,15 @@ app.post('/api/speech', async (req, res) => {
 
         if (!text) {
             return res.status(400).json({ error: 'Text is required' });
+        }
+
+        // Check if AWS credentials are configured
+        if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
+            return res.status(503).json({ 
+                error: 'AWS credentials not configured',
+                details: 'Please configure AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in your .env file',
+                useBrowserFallback: true
+            });
         }
 
         console.log(`Synthesizing speech for language: ${language}`);
@@ -93,20 +111,22 @@ app.post('/api/speech', async (req, res) => {
 
         const response = await pollyClient.send(command);
 
-        // Set appropriate headers
-        const headers = {
-            'Content-Type': 'audio/mpeg',
-            'Cache-Control': 'no-cache'
-        };
-
-        if (response.AudioStream && response.AudioStream.length) {
-            headers['Content-Length'] = response.AudioStream.length;
+        // Convert AudioStream to Buffer
+        const chunks = [];
+        for await (const chunk of response.AudioStream) {
+            chunks.push(chunk);
         }
+        const audioBuffer = Buffer.concat(chunks);
 
-        res.set(headers);
+        // Set appropriate headers
+        res.set({
+            'Content-Type': 'audio/mpeg',
+            'Content-Length': audioBuffer.length,
+            'Cache-Control': 'no-cache'
+        });
 
-        // Stream the audio data
-        response.AudioStream.pipe(res);
+        // Send the audio data
+        res.send(audioBuffer);
 
     } catch (error) {
         console.error('Error synthesizing speech:', error);

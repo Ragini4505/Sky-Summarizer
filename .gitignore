@@ -1,15 +1,25 @@
-# Node modules
-backend/node_modules/
+node_modules/
 
-# Environment files
-backend/.env
-
-# Logs
+# Ignore log files
 *.log
 
-# OS files
+# Ignore OS generated files
 .DS_Store
 Thumbs.db
 
 # Ignore environment files
 .env
+
+# Ignore build output
+dist/
+build/
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.iml
